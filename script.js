@@ -2303,14 +2303,22 @@ if (IS_HEADER) {
     });
   }, 0);
 }
-// bật âm thanh cho điện thoại
-document.addEventListener("click", function () {
+// unlock audio for mobile (fireworks project)
+function unlockSound() {
     try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const buffer = ctx.createBuffer(1, 1, 22050);
-        const source = ctx.createBufferSource();
-        source.buffer = buffer;
-        source.connect(ctx.destination);
-        source.start(0);
+        if (window.soundManager && soundManager.ctx) {
+            const ctx = soundManager.ctx;
+            const buffer = ctx.createBuffer(1, 1, 22050);
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(ctx.destination);
+            source.start(0);
+
+            ctx.resume();
+        }
     } catch(e){}
-}, { once: true });
+}
+
+document.addEventListener("touchstart", unlockSound, { once: true });
+document.addEventListener("click", unlockSound, { once: true });
+
