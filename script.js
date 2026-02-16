@@ -2303,3 +2303,14 @@ if (IS_HEADER) {
     });
   }, 0);
 }
+// bật âm thanh cho điện thoại
+document.addEventListener("click", function () {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+    } catch(e){}
+}, { once: true });
