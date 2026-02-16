@@ -2288,7 +2288,26 @@ function setLoadingStatus(status) {
   document.querySelector(".loading-init__status").textContent = status;
 }
 
+// ===== MOBILE AUDIO UNLOCK (FIX NO SOUND) =====
+let audioUnlocked = false;
 
+function unlockAudioOnce() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+        ctx.resume();
+    } catch(e) {}
+}
+
+document.addEventListener("touchstart", unlockAudioOnce, { once: true });
+document.addEventListener("click", unlockAudioOnce, { once: true });
 if (IS_HEADER) {
   init();
 } else {
@@ -2321,4 +2340,5 @@ function unlockSound() {
 
 document.addEventListener("touchstart", unlockSound, { once: true });
 document.addEventListener("click", unlockSound, { once: true });
+
 
